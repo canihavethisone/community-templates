@@ -1,5 +1,5 @@
 <%#
-name: Applicable errata
+name: Host - Applicable Errata
 snippet: false
 template_inputs:
 - name: Hosts filter
@@ -19,8 +19,9 @@ template_inputs:
 model: ReportTemplate
 require:
 - plugin: katello
-￼ version: 3.9.0
+￼ version: 3.16.0
 -%>
+<%- report_headers 'Host', 'Operating System', 'Environment', 'Erratum', 'Type', 'Published', 'Applicable since', 'Severity', 'Packages', 'CVEs', 'Reboot suggested' -%>
 <%- load_hosts(search: input('Hosts filter'), includes: [:operatingsystem, :applicable_errata, :lifecycle_environment]).each_record do |host| -%>
 <%-   host_applicable_errata_filtered(host, input('Errata filter')).each do |erratum| -%>
 <%-     report_row(
@@ -33,7 +34,7 @@ require:
           'Applicable since': erratum.created_at,
           'Severity': erratum.severity,
           'Packages': erratum.package_names,
-          'CVEs': erratum.cves,
+          'CVEs': erratum.cves.map { |c| c.cve_id },
           'Reboot suggested': erratum.reboot_suggested,
         ) -%>
 <%-   end -%>
