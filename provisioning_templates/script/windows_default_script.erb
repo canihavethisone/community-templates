@@ -102,7 +102,7 @@ for /f %%u in ('dir /s/b C:\updates\*.msu') do dism.exe /Image:C:\ /Add-Package 
 
 echo Setting the boot sector
 bootsect.exe /nt60 C:
-<% if windowsEFI == 'true' or @host.ptable.name == 'Windows default GPT EFI partition table' -%>
+<% if windowsEFI == 'true' || @host.ptable.name == 'Windows default GPT EFI partition table' -%>
   C:\Windows\System32\bcdboot C:\Windows /l en-US /s k: /f ALL
 <% else %>
   C:\Windows\System32\bcdboot C:\Windows /l en-US
